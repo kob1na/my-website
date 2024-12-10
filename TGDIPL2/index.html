@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каталог продуктов</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f5f5f5;
+        }
+        .container {
+            margin: 20px auto;
+            width: 80%;
+            max-width: 1200px;
+        }
+        .product {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fff;
+            padding: 15px;
+            margin: 10px;
+            display: inline-block;
+            width: calc(30% - 20px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .product img {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 10px;
+        }
+        .product h3 {
+            font-size: 18px;
+            margin: 5px 0;
+        }
+        .product p {
+            font-size: 14px;
+            margin: 5px 0;
+        }
+        .product button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .product button:hover {
+            background-color: #218838;
+        }
+        .footer {
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        // Пример данных о продуктах
+        const products = [
+            { id: 1, name: "Сахар-песок", description: "Качественный сахар.", price: 50.00 },
+            { id: 2, name: "Свинина охлажденная", description: "Свежая свинина.", price: 350.00 },
+            { id: 3, name: "Говядина охлажденная", description: "Отборная говядина.", price: 450.00 },
+            { id: 4, name: "Рис длиннозерный", description: "Длиннозерный рис.", price: 120.00 },
+            { id: 5, name: "Подсолнечное масло", description: "Рафинированное масло.", price: 110.00 },
+            { id: 6, name: "Мука высшего сорта", description: "Пшеничная мука.", price: 45.00 },
+            { id: 7, name: "Куриные грудки", description: "Охлажденные грудки.", price: 300.00 },
+            { id: 8, name: "Яйца куриные", description: "Свежие яйца.", price: 60.00 },
+            { id: 9, name: "Чай черный", description: "Насыщенный чай.", price: 150.00 },
+            { id: 10, name: "Молоко пастеризованное", description: "Молоко 3.2%.", price: 80.00 }
+        ];
+
+        // Рендеринг продуктов
+        function renderProducts() {
+            const container = document.getElementById('product-container');
+            products.forEach(product => {
+                const div = document.createElement('div');
+                div.className = 'product';
+                div.innerHTML = `
+                    <img src="https://via.placeholder.com/100" alt="${product.name}">
+                    <h3>${product.name}</h3>
+                    <p>${product.description}</p>
+                    <p><strong>${product.price.toFixed(2)} ₽</strong></p>
+                    <button onclick="addToCart(${product.id})">Добавить в корзину</button>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // Добавление в корзину
+        let cart = [];
+        function addToCart(productId) {
+            if (!cart.includes(productId)) {
+                cart.push(productId);
+                alert('Продукт добавлен в корзину!');
+            } else {
+                alert('Продукт уже в корзине!');
+            }
+            console.log("Текущая корзина:", cart);
+        }
+
+        // Отправка корзины
+        function submitCart() {
+            try {
+                Telegram.WebApp.sendData(JSON.stringify(cart));
+                console.log("Корзина отправлена:", cart);
+            } catch (error) {
+                console.error("Ошибка при отправке корзины:", error);
+                alert("Не удалось отправить данные корзины. Проверьте WebApp.");
+            }
+        }
+
+        // Запуск рендеринга после загрузки
+        window.onload = () => {
+            renderProducts();
+        };
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Каталог продуктов</h1>
+        <div id="product-container">
+            <!-- Продукты будут добавлены сюда -->
+        </div>
+        <div class="footer">
+            <button onclick="submitCart()">Отправить корзину</button>
+        </div>
+    </div>
+</body>
+</html>
